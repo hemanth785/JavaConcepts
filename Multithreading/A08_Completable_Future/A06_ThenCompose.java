@@ -46,6 +46,8 @@ public class A06_ThenCompose {
     CompletableFuture<Double> future = getUserDetail("user-1")
     .thenCompose(user -> {
       return getCreditRating(user);
+    }).thenCompose(order -> {
+      return getCreditRating2(order); //Just for demonstration
     });
 
     try {

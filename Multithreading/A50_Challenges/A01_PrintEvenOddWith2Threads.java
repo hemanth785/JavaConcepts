@@ -17,7 +17,7 @@ public class A01_PrintEvenOddWith2Threads {
 }
 
 class PrintEvenOdd implements Runnable{
-  int remainder;
+  int remainder; //this is specific to object
 
   // it is important for this object to be static, 
   // because there should be single instance of this object for applying synchronization
@@ -35,10 +35,10 @@ class PrintEvenOdd implements Runnable{
 
         while(counter%2 != remainder){
           try {
+            
             obj.wait();
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
+
+          } catch (InterruptedException e) {}
         }
        
         
