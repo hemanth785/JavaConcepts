@@ -7,13 +7,13 @@ import java.util.concurrent.RecursiveTask;
 
 /*
  * ForkJoinPool can be used, where we need to split the single task into multiple subtasks, 
- * and these subtasks can be processed by multipel threads again (This is called work stealing)
+ * and these subtasks can be processed by multiple threads again (This is called work stealing)
  * 
  * - ForkJoin pool threads fetch the tasks from 2 queues
  *    1. Task submission queue (main queue) - This is where the task submitted to threadpool will be sitting before gettign processed
  *    2. Subtask Queue (Work stealing queue) - When thread picks up any task, and if that task can be devided into subtasks, those subtasks will be pushed to this queue
  * 
- * Note: - Each thread will have its won 'work stealing queue',
+ * Note: - Each thread will have its own 'work stealing queue',
  *       - When thread completes its task, it'll first check in its own subtask queue(work stealing queue)
  *       - If emtpy, then it'll check in the submission task queue
  *       - If thats also empty, it'll pick task from other 'work stealing queue' of other Threads

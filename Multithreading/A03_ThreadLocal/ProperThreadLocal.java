@@ -1,32 +1,33 @@
-package Test;
+package A03_ThreadLocal;
 
-public class Test {
-  public static void main(String args[]){
-    // UserService service = new UserService();
-    UserService2 service = new UserService2();
+public class ProperThreadLocal {
+  public static void main(String[] args) {
+     // UserService service = new UserService();
+     UserService2 service = new UserService2();
 
-    Thread t1 = new Thread(() -> {
-      service.setUser("Alice");
-      service.processUser();
-    });
-
-    Thread t2 = new Thread(() -> {
-      service.setUser("Bob");
-      service.processUser();
-    });
-
-    Thread t3 = new Thread(() -> {
-      service.setUser("Mark");
-      service.processUser();
-    });
-
-    t1.start();
-    t2.start();
-    t3.start();
+     Thread t1 = new Thread(() -> {
+       service.setUser("Alice");
+       service.processUser();
+     });
+ 
+     Thread t2 = new Thread(() -> {
+       service.setUser("Bob");
+       service.processUser();
+     });
+ 
+     Thread t3 = new Thread(() -> {
+       service.setUser("Mark");
+       service.processUser();
+     });
+ 
+     t1.start();
+     t2.start();
+     t3.start();
   }
 }
 
-// 1. "WITHOUT" Threadlocal
+
+// Scenario 1 - "WITHOUT" Threadlocal
 class UserService {
   String user; //Issue here
 
@@ -56,8 +57,7 @@ class UserService {
 }
 
 
-
-// 2. WITH Threadlocal
+// Scenario 1 - WITH Threadlocal
 class UserService2 {
   // String user; 
   ThreadLocal<String> user = new ThreadLocal<>();

@@ -7,6 +7,13 @@ import java.util.concurrent.locks.ReentrantLock;
  * when called with 2 differet object, it wont work.
  */
 
+
+ /*
+  * Each lock acts as single permit to access the resource
+  * 
+  * How to decide whether we need single lock or multiple locks?
+  * That depends on how much concurrency we are ready to provide on particular resource.
+  */
 public class A01_Reentrant_Lock {
   public static void main(String[] args) {
     ReentrantLock lock = new ReentrantLock();

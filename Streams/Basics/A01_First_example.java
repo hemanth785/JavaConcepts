@@ -1,7 +1,11 @@
 package Streams.Basics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Get and count employes with salary greater than 3000
@@ -16,12 +20,48 @@ public class A01_First_example {
     salaries.add(15000);
     salaries.add(53000);
     salaries.add(26000);
+    salaries.add(26000);
     salaries.add(38000);
     salaries.add(44000);
+    salaries.add(44000);
 
-    long count = salaries.stream().filter((salary) -> salary > 30000).count();
+    List<Integer> streamResult = salaries.stream().filter((salary) -> {
+      return salary > 20000;
+    })
+    .map(salary -> {
+      return salary+1000;
+    })
+    .distinct()
+    .sorted(Comparator.reverseOrder()) //default reverse sorting
+    .sorted((a, b) -> {
+      return a-b; //custom sorting
+    })
+    .limit(5)
+    .collect(Collectors.toList()); //terminal operation
 
-    System.out.println("Employes having salary greater than 30000: "+ count);
+    System.out.println("Stream result 1: "+ streamResult);
+
+
+    //Custom sorting using lambda expression
+    List<Integer> sortedList = salaries.stream()
+      .sorted( (i1, i2) -> i2.compareTo(i1) )
+      .collect(Collectors.toList());
+
+
+    //Reduce method - It is also a terminal operation
+    Optional<Integer> totalSum = salaries.stream()
+    .reduce((sumSoFar, val) -> { //val1 stores sum so far
+      return sumSoFar+val;
+    });
+
+    System.out.println("Total sum: "+ totalSum.get());
+
+    //toArrayMethod
+    Integer[] salaryArray = salaries.stream()
+    .sorted()
+    .toArray(size -> new Integer[size]);
+
+    System.out.println("salary Array: "+ Arrays.toString(salaryArray));
   }
   
 }

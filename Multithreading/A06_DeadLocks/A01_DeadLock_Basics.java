@@ -1,9 +1,5 @@
 package A06_DeadLocks;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
 
 /*
@@ -17,52 +13,47 @@ public class A01_DeadLock_Basics {
   static ReentrantLock lockA = new ReentrantLock();
   static ReentrantLock lockB = new ReentrantLock();
 
-  public static void main(String[] args){
-    ExecutorService pool = Executors.newFixedThreadPool(2);
-
-    pool.execute(new ProcessThis());
-    pool.execute(new ProcessThat());
-  }
-
-
-  static class ProcessThis implements Runnable{
-    public void run(){
-
+  public static void main(String[] args) {
+    Thread task1 = new Thread(() -> {
       lockA.lock();
-      System.out.println("This: aquired lock A");
+      System.out.println("Task 1 acquired lock A");
 
-      //Note: If we remove sleep, then sometimes deadlock may not occur
       try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+        Thread.sleep(3000);
+      } catch (InterruptedException e) { e.printStackTrace(); }
 
       lockB.lock();
-      System.out.println("This: aquired lock B");
+      System.out.println("Task 1 acquired lock B");
 
-      lockA.unlock();
-      System.out.println("This: released lock A");
+      lockB.notify();
+      System.out.println("Task 1 released lock B");
 
-      lockB.unlock();
-      System.out.println("This: released lock B");
-    }
-  }
+      lockA.notify();
+      System.out.println("Task 1 released lock A");
+  
+    });
 
-  static class ProcessThat implements Runnable{
-    public void run(){
+    Thread task2 = new Thread(() -> {
       lockB.lock();
-      System.out.println("That: aquired lock B");
+      System.out.println("Task 2 acquired lock B");
+
+      try {
+        Thread.sleep(3000);
+      } catch (InterruptedException e) { e.printStackTrace(); }
 
       lockA.lock();
-      System.out.println("That: aquired lock A");
+      System.out.println("Task 2 acquired lock A");
 
-      lockA.unlock();
-      System.out.println("That: released lock A");
+      lockA.notify();
+      System.out.println("Task 2 released lock A");
 
-      lockB.unlock();
-      System.out.println("That: released lock B");
-    }
+      lockB.notify();
+      System.out.println("Task 2 released lock B");
+  
+    });
+
+    task1.start();
+    task2.start();
   }
 
 }

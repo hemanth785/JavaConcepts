@@ -10,6 +10,8 @@ import java.util.concurrent.locks.StampedLock;
 public class A04_Semaphore_Lock {
   public static void main(String[] args) {
     Semaphore lock = new Semaphore(4);
+    //Note: Semaphone with permit 4 is same as, creating 4 different 'Rentrant locks' 
+    //and let the tasks use whichever the lock is free - On the other way, each lock acts as single permit to access resource
 
     SharedResource resouceInstance1 = new SharedResource();
     Thread t1 = new Thread(() -> {
